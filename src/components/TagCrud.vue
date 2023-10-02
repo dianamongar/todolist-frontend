@@ -20,7 +20,7 @@ export default {
     mounted(){
         // Verifica si this.tagService se ha creado antes de llamar a getAllTagsByUserId
         try {
-            this.tagService.getAllTagsByUserId().then((data) => {
+            this.tagService.getAllTagsByUserId(2).then((data) => {
                 this.tags = data.data.content;
                 console.log(this.tags);
             });

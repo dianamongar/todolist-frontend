@@ -1,16 +1,16 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <TagCrud />
+  <LoginView />
 </template>
 
 <script>
-import TagCrud from './components/TagCrud.vue'
+import LoginView from './components/LoginView.vue';
+//import TagCrud from './components/TagCrud.vue';
 
 export default {
   name: 'App',
   components: {
-    TagCrud
-  }
+    LoginView
+}
 }
 </script>
 
