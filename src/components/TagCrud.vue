@@ -1,5 +1,9 @@
 <template>
     <h1>hola :D </h1>
+    <DataTable :value="tags" removableSort tableStyle="min-width: 50rem">
+        <ColumnComponent field="" header="N°" sortable style="width: 25%"></ColumnComponent>
+        <ColumnComponent field="name" header="Name" sortable style="width: 25%"></ColumnComponent>
+    </DataTable>
 </template>
 <script>
 import TagService from '../service/TagService';
@@ -15,12 +19,14 @@ export default {
     },
     mounted(){
         // Verifica si this.tagService se ha creado antes de llamar a getAllTagsByUserId
-    if (this.tagService) {
-        this.tagService.getAllTagsByUserId().then((data) => {
-            console.log(data);
-        });
-        } else {
-            console.error("this.tagService no se ha inicializado correctamente.");
+        try {
+            this.tagService.getAllTagsByUserId().then((data) => {
+                this.tags = data.data.content;
+                console.log(this.tags);
+            });
+            
+        } catch (error) {
+            console.error("Se produjo un error al obtener las etiquetas:", error);
         }
     }
 }

@@ -12,4 +12,8 @@ app.component('ColumnGroup', ColumnGroup);
 app.component('ColumnComponent', Column);
 app.component('RowComponent', Row);
 
+import 'primevue/resources/themes/saga-blue/theme.css';
+import 'primevue/resources/primevue.min.css';
+import 'primeicons/primeicons.css';
+
 app.mount('#app')
