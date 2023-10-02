@@ -1,16 +1,16 @@
 <template>
-  <LoginView />
+  <div>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-import LoginView from './components/LoginView.vue';
+// import LoginView from './components/LoginView.vue';
 //import TagCrud from './components/TagCrud.vue';
 
 export default {
   name: 'App',
-  components: {
-    LoginView
-}
+  
 }
 </script>
 
