@@ -1,9 +1,9 @@
 <template>
     <h1>hola :D </h1>
-    <!-- <DataTable :value="tags" removableSort tableStyle="min-width: 50rem">
+    <DataTable :value="tags" removableSort tableStyle="min-width: 50rem">
         <ColumnComponent field="" header="N°" sortable style="width: 25%"></ColumnComponent>
         <ColumnComponent field="name" header="Name" sortable style="width: 25%"></ColumnComponent>
-    </DataTable> -->
+    </DataTable>
 </template>
 <script>
 import TagService from '../service/TagService';

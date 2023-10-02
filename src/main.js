@@ -10,8 +10,10 @@ import InputText from 'primevue/inputtext';
 import Divider from 'primevue/divider';
 import Button from 'primevue/button';
 import Password from 'primevue/password';
+import Menubar from 'primevue/menubar';
 
-               // optional
+
+
 
 const app = createApp(App);
 
@@ -23,6 +25,7 @@ app.component('InputText', InputText);
 app.component('DividerComponent', Divider);
 app.component('ButtonComponent', Button);
 app.component('PasswordComponent', Password);
+app.component('MenuBar', Menubar);
 
 
 import 'primevue/resources/themes/lara-light-indigo/theme.css';
