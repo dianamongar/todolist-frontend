@@ -1,4 +1,5 @@
 <template>
+    <NavBarBase/>
     <h1>hola :D </h1>
     <DataTable :value="tags" removableSort tableStyle="min-width: 50rem">
         <ColumnComponent field="" header="N°" sortable style="width: 25%"></ColumnComponent>
@@ -7,8 +8,12 @@
 </template>
 <script>
 import TagService from '../service/TagService';
+import NavBarBase from "@/components/NavBarBase.vue";
 export default {
     name : 'TagCrud',
+    components: {
+        NavBarBase,
+    },
     data() {
         return {
             tags : null,
