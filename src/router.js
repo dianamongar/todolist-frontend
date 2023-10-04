@@ -5,6 +5,7 @@ import Login from './components/LoginView.vue';
 import NavBar from './components/NavBarBase.vue';
 import TagCrud from './components/TagCrud.vue';
 import TaskCrud from './components/TaskCrud.vue';
+import CreateTask from './components/CreateTask.vue';
 
 
 const routes = [
@@ -12,6 +13,7 @@ const routes = [
     { path: '/main', component: NavBar, name: 'main' },
     { path: '/tags', component: TagCrud, name: 'tags' },
     { path: '/tasks', component: TaskCrud, name: 'tasks' },
+    { path: '/tasks', component: CreateTask, name: 'createTask' },
 ];
 
 const router = createRouter({

@@ -4,33 +4,8 @@
     <div class="cabecera">
         <h1>Lista de tareas</h1>
         <div>
-            <div>
-        <button @click="showDialog = true" class="btn btn-primary">Abrir Diálogo</button>
-
-        <!-- Diálogo emergente Bootstrap -->
-        <div class="modal" tabindex="-1" role="dialog" v-if="showDialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Título del Diálogo</h5>
-                <button type="button" class="close" @click="showDialog = false">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Contenido del diálogo -->
-                <!-- Aquí puedes agregar tu formulario u otro contenido -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @click="showDialog = false">Cerrar</button>
-                <button type="button" class="btn btn-primary">Guardar</button>
-            </div>
-            </div>
-        </div>
-        </div>
-    </div>
-    </div>
-        
+                <ButtonComponent @click="createTask" class="p-button p-button-primary">Abrir Diálogo</ButtonComponent>
+        </div> 
     </div>
     <br/>
     <div class="card">
@@ -73,13 +48,9 @@ export default {
         }
     },
     methods: {
-    // agregarTarea() {
-    //     // Aquí puedes guardar los datos de la tarea en tu lista de tareas o en tu estado de Vuex, etc.
-    //     // Luego, cierra el diálogo:
-    //     this.showDialog = false;
-        
-    //     // También puedes hacer la lógica para agregar la tarea a tu ToDo list.
-    // },
+    createTask() {
+        this.$router.push({ name: 'createTask'});
+    },
     },
 }
 </script>

@@ -14,6 +14,9 @@ import Password from 'primevue/password';
 import Menubar from 'primevue/menubar';
 import Card from 'primevue/card';
 import Dialog from 'primevue/dialog';
+import Textarea from 'primevue/textarea';
+import CheckBox from 'primevue/checkbox';
+
 
 
 
@@ -32,6 +35,10 @@ app.component('PasswordComponent', Password);
 app.component('MenuBar', Menubar);
 app.component('CardComponent', Card);
 app.component('DialogComponent', Dialog);
+app.component('TextArea', Textarea);
+app.component('CheckBox', CheckBox);
+
+
 
 
 import 'primevue/resources/themes/lara-light-indigo/theme.css';
