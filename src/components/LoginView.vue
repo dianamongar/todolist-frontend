@@ -1,8 +1,8 @@
 
 <template>
-    <div class="card flex flex-column justify-center items-center">
-    <div class="card text-center">
-        <div class="flex flex-column md:flex-row">
+    <div class="p-grid p-justify-center">
+        <div class="p-grid p-justify-center">
+            <div class="p-grid p-justify-center">
             <div class="w-full md:w-5 flex flex-column align-items-center justify-content-center gap-3 py-5">
                 <div class="flex align-items-center gap-2">
                     <label>Username</label>
