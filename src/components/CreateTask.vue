@@ -53,10 +53,10 @@
                 name : "",
                 dueDateDate : "",
                 dueDateHour : "",
-                tags : [],
             },
             tags : [],
             selectedTags: [], // Lista de etiquetas seleccionadas
+            idUser : null,
         }
     },
     created(){
@@ -66,14 +66,14 @@
     mounted(){
         
         try {
-            const idUser = this.$store.getters['getUserId'];
-            console.log("ID del usuario reconocido en create task : " + idUser);
-            if(idUser == null){
+            this.idUser = this.$store.getters['getUserId'];
+            console.log("ID del usuario reconocido en create task : " + this.idUser);
+            if(this.idUser == null){
                 console.log("No hay usuario logueado");
                 this.$router.push({ name: 'login'});
             }
             try {
-                this.tagService.getAllTagsByUserId(idUser).then((data) => {
+                this.tagService.getAllTagsByUserId(this.idUser).then((data) => {
                     this.tags = data.data.content;
                     console.log(this.tags);
                 });
@@ -88,8 +88,50 @@
     },
     methods: {
     createTask() {
-        this.$router.push({ name: 'createTask'});
+        try{
+            console.log("se recuperó la nueva tarea:" + this.task.name);
+            console.log('fecha de vencimiento: ' + this.task.dueDateDate + "hora: " + this.task.dueDateHour);
+            console.log('etiquetas seleccionadas: ' + this.selectedTags);
+            this.taskService.insertTaskForUser(this.idUser, this.task.dueDateDate, this.task.dueDateHour, this.task.name).then((data) => {
+                console.log("codigo de respuesta http: "+ data.data.code);
+                if(data.data.code == "T-000"){
+                    //TODO en el back añadir el id de la tarea TT
+                    console.log("tarea :" + data.data.content.id_tasks);
+                    //se insertó correctamente la tarea :D
+                    console.log('se creó la tarea correctamente :D');
+                    //asociamos las etiquetas a la tarea
+                    this.insertTagOfTask(data.data.content.id_tasks);
+                    //this.$router.push({ name: 'tasks'});
+                }else{
+                    console.log('no se pudo crear la tarea :(');
+                }
+            });
+        }catch(error)
+        {
+            console.log("Se produjo un error al crear la tarea:", error);
+        }
     },
+    insertTagOfTask(taskId){
+        try{
+            console.log("llegamos a insert tag of task");
+            this.selectedTags.forEach((tag) => {
+                console.log(tag);
+                this.taskService.insertTagOfTask(taskId,tag, this.idUser).then((data) => {
+                    console.log("codigo de respuesta http: "+ data.data.code);
+                    if(data.data.code == "T-000"){
+                        //se insertó correctamente la tarea :D
+                        console.log('se creó la tarea correctamente :D '+ tag);
+                        
+                    }else{
+                        console.log('no se pudo crear la tarea :(');
+                    }
+                });
+            });
+            this.$router.push({ name: 'tasks'});
+        }catch(error){
+            console.log("Se produjo un error al insertar la etiqueta de la tarea:", error);
+        }
+    }
     },
 }
 </script>

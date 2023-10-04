@@ -26,4 +26,25 @@ export default class TaskService{
         return axios.get(this.urlPending,{ headers });
         
     }
+    insertTaskForUser(userId, dueDateDate, dueDateTime, name){
+        const headers = {
+            'id_users': userId,
+        };
+        const dueDate = dueDateDate + "T" + dueDateTime+":00.000Z";
+        const requestData = {
+            "name" : name,
+            "due_date" : dueDate
+        }
+        return axios.post(this.url, requestData,{ headers });
+    }
+    insertTagOfTask(taskId, tagId, userId){
+        const headers = {
+            'id_users': userId,
+        };
+        const requestData = {
+            "id_tags" : tagId
+        }
+        const urlInsertTagOfTask = `http://localhost:8080/api/v1/tasks/${taskId}/tags`;
+        return axios.post(urlInsertTagOfTask, requestData,{ headers });
+    }
 }
