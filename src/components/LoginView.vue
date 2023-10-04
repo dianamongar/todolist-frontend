@@ -28,6 +28,7 @@
 
 <script>
 import UserService from '../service/UserService';
+// import { useStore } from 'vuex';
 export default {
     
     name : 'LoginView',
@@ -40,7 +41,8 @@ export default {
         }
     },
     created(){
-        this.userService = new UserService();
+        this.userService = new UserService(this.$store);
+        
     },
     mounted(){
         
@@ -55,7 +57,14 @@ export default {
                 console.log("codigo de respuesta http: "+ data.data.code);
                 if(data.data.code == "T-000"){
                     //se recuperó el usuario con exito, se da paso al main
-                    this.$router.push('/main');
+                    const userId = data.data.content.id_users;
+                    console.log("este es el user id : "+userId);
+                    // this.$store.dispatch('user/setUserId', userId);
+                    this.$store.commit('setUserId', userId);
+                    // Utiliza this.$store.getters para obtener el ID del usuario
+                    const idDice = this.$store.getters['getUserId'];
+                    console.log("ID del usuario reconocido: " + idDice);
+                    this.$router.push({ name: 'tasks'});
                 }else{
                     console.log('no se pudo loguear correctamente :(');
                 }

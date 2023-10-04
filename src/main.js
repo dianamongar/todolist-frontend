@@ -1,6 +1,7 @@
 import  {createApp} from 'vue'
 import App from './App.vue'
 import router from './router' 
+import store from './store/store'
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -33,5 +34,5 @@ import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css'; 
 import 'primeflex/primeflex.css';
 app.use(router)
-
+app.use(store)
 app.mount('#app')

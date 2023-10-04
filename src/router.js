@@ -8,11 +8,10 @@ import TaskCrud from './components/TaskCrud.vue';
 
 
 const routes = [
-    { path: '/', component: Login },
-    { path: '/main', component: NavBar },
-    { path: '/tags', component: TagCrud },
-    { path: '/tasks', component: TaskCrud },
-
+    { path: '/', component: Login, name: 'login' },
+    { path: '/main', component: NavBar, name: 'main' },
+    { path: '/tags', component: TagCrud, name: 'tags' },
+    { path: '/tasks', component: TaskCrud, name: 'tasks' },
 ];
 
 const router = createRouter({

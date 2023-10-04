@@ -27,8 +27,10 @@ export default {
         this.taskService = new TaskService();
     },
     mounted(){
+        const idDice = this.$store.getters['getUserId'];
+        console.log("ID del usuario reconocido en task : " + idDice);
         try {
-            this.taskService.getAllTasksByUserId(2).then((data) => {
+            this.taskService.getAllTasksByUserId(idDice).then((data) => {
                 this.tasks = data.data.content;
                 console.log(this.tasks);
             });
