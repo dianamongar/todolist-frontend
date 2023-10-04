@@ -42,9 +42,10 @@ export default class TaskService{
             'id_users': userId,
         };
         const requestData = {
-            "id_tags" : tagId
+            "tags" : tagId
         }
         const urlInsertTagOfTask = `http://localhost:8080/api/v1/tasks/${taskId}/tags`;
+        console.log(urlInsertTagOfTask);
         return axios.post(urlInsertTagOfTask, requestData,{ headers });
     }
 }

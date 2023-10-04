@@ -95,7 +95,6 @@
             this.taskService.insertTaskForUser(this.idUser, this.task.dueDateDate, this.task.dueDateHour, this.task.name).then((data) => {
                 console.log("codigo de respuesta http: "+ data.data.code);
                 if(data.data.code == "T-000"){
-                    //TODO en el back añadir el id de la tarea TT
                     console.log("tarea :" + data.data.content.id_tasks);
                     //se insertó correctamente la tarea :D
                     console.log('se creó la tarea correctamente :D');
