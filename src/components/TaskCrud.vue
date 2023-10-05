@@ -25,7 +25,7 @@
                                 <p class="mb-1">Fecha de vencimiento: <strong>{{task.task.due_date}}</strong></p>
                                 <small>Fecha de completado: {{task.task.completation_date}}</small>
                                 <div v-for="tag in task.tag" :key="tag">
-                                    <mark style="background-color: rgba(237, 221, 144, 0.58);">{{tag}}</mark>
+                                    <i class="fas fa-tag"></i><mark style="background-color: rgba(255, 237, 148, 0.58);">{{tag}}</mark>
                                 </div>
                             </div>
                         </a>
@@ -35,27 +35,19 @@
                             <!-- Icono de Editar (lápiz) más pequeño y con margen -->
                             <a href="#" class="btn btn-primary btn-sm mr-2" ><i class="fas fa-pencil-alt"></i> Editar</a>
                             <!-- Icono de Borrar (basura) más pequeño y con margen -->
-                            <a href="#" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Borrar</a>
+                            <a href="#" class="btn btn-danger btn-sm"  @click="confirmDelete"><i class="fas fa-trash-alt"></i> Borrar</a>
                         </div>
                     </div>
                 </div>
             <br/>
         </div>
+        <br/>
     </div>
-    <!-- <div class="card">
-        <DataTable :value="tasks" removableSort tableStyle="min-width: 50rem">
-            <ColumnComponent field="" header="Etiquetas" sortable style="width: 25%"></ColumnComponent>
-            <ColumnComponent field="task.name" header="Descripción" sortable style="width: 25%"></ColumnComponent>
-            <ColumnComponent field="task.state" header="Estado" sortable style="width: 25%"></ColumnComponent>
-            <ColumnComponent field="task.due_date" header="Fecha de vencimiento" sortable style="width: 25%"></ColumnComponent>
-            <ColumnComponent field="task.completation_date" header="Fecha de completado" sortable style="width: 25%"></ColumnComponent>
-            
-        </DataTable>
-    </div> -->
+    
 </template>
 
-
 <script>
+import Swal from 'sweetalert2';
 import TaskService from '../service/TaskService';
 export default {
     name : 'TaskCrud',
@@ -84,6 +76,24 @@ export default {
     methods: {
     createTask() {
         this.$router.push({ name: 'createTask'});
+    },
+    confirmDelete() {
+        Swal.fire({
+            title: '¿Estás segur@?',
+            text: '¿Quieres eliminar esta tarea?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+            // Aquí puedes agregar la lógica para eliminar el registro
+            // Llamar a tu función de eliminación o realizar alguna acción
+            Swal.fire('Eliminado', 'El registro ha sido eliminado', 'success');
+            }
+        });
     },
     },
 }
