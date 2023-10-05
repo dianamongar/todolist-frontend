@@ -2,10 +2,33 @@
     <NavBarBase/>
     <div class="cabecera">
         <h1>Lista de etiquetas</h1>
-        <div>
-            <ButtonComponent @click="createTag" class="p-button p-button-primary"><strong>Nueva etiqueta</strong></ButtonComponent>
-        </div> 
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crearEtiquetaModal">Nueva Etiqueta</button>
     </div>
+    <!--aqui esta el dialog para crear una nueva etiqueta-->
+    <div class="modal fade" id="crearEtiquetaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Crear Etiqueta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para crear etiqueta -->
+                <form>
+                <div class="mb-3">
+                    <label for="nombreEtiqueta" class="form-label">Nombre de la Etiqueta</label>
+                    <input type="text" class="form-control" id="nombreEtiqueta" placeholder="Ingrese el nombre de la etiqueta">
+                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Guardar</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!--aqui termina-->
     <br/>
     <div class="list-group" style="padding:5%" >
                 <div v-for="tag in tags" :key="tag.id_tags" class="card" >
