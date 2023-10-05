@@ -35,7 +35,7 @@
                     <div class="p-grid p-justify-center">
                         <br/>
                         <button type="submit" class="p-button p-button-primary">Guardar</button>
-                        <button class="p-button p-button-secondary">Cancelar</button>
+                        <button class="p-button p-button-secondary" @click="cancel">Cancelar</button>
                     </div>
                 </form>
             </template>
@@ -130,7 +130,10 @@
         }catch(error){
             console.log("Se produjo un error al insertar la etiqueta de la tarea:", error);
         }
-    }
+    },
+    cancel() {
+        this.$router.push({ name: 'tasks'});
+    },
     },
 }
 </script>
