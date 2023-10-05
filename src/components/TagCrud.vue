@@ -14,16 +14,14 @@
             </div>
             <div class="modal-body">
                 <!-- Formulario para crear etiqueta -->
-                <form>
+                <form @submit.prevent="createTag">
                 <div class="mb-3">
                     <label for="nombreEtiqueta" class="form-label">Nombre de la Etiqueta</label>
-                    <input type="text" class="form-control" id="nombreEtiqueta" placeholder="Ingrese el nombre de la etiqueta">
+                    <input type="text" class="form-control" id="name" v-model="newTag" placeholder="Ingrese el nombre de la etiqueta" required>
                 </div>
-                </form>
-            </div>
-            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Guardar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
             </div>
             </div>
         </div>
@@ -64,6 +62,7 @@ export default {
         return {
             tags : null,
             userId : null, 
+            newTag : null,
         }
     },
     created(){
@@ -117,8 +116,30 @@ export default {
                 }
             })
         },
+        createTag(){
+            console.log("se recuperó la nueva etiqueta:" + this.newTag);
+            this.tagService.insertTagForUser(this.userId, this.newTag).then((data) => {
+                console.log("codigo de respuesta http: "+ data.data.code);
+                if(data.data.code == "T-000"){
+                    //se insertó correctamente la etiqueta :D
+                    console.log('se creó la etiqueta correctamente :D');
+                    this.tagService.getAllTagsByUserId(this.userId).then((data) => {
+                        this.tags = data.data.content;
+                        console.log(this.tags);
+                    });
+                    Swal.fire(
+                        '¡Creado!',
+                        'La etiqueta ha sido creada.',
+                        'success'
+                    )
+                }else{
+                    console.log('no se pudo crear la etiqueta :(');
+                }
+            }
+            );
         },
-    }
+    },
+}
 </script>
 <style scoped>
 

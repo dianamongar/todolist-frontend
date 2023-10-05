@@ -16,4 +16,13 @@ export default class TagService{
         const urlDeleteTag = `http://localhost:8080/api/v1/tags/${tagId}`;
         return axios.delete(urlDeleteTag,{ headers });
     }
+    insertTagForUser(userId, name){
+        const headers = {
+            'id_users': userId,
+        };
+        const requestData = {
+            "name" : name
+        }
+        return axios.post(this.url, requestData,{ headers });
+    }
 }
