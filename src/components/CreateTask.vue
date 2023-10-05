@@ -26,9 +26,41 @@
                 </div>
                 </div>
                 <!-- FIN ETIQUETAS PARA ASOCIAR A LA TAREA -->
-                <div class="mb-3">
-                <button type="submit" class="btn btn-primary">Guardar</button>
-                <button type="button" class="btn btn-secondary" @click="cancel">Cancelar</button>
+                <!--crear nueva tag-->
+                <br/>
+                <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#crearEtiquetaModal">Nueva Etiqueta</button>
+                    
+                </div>
+                <br/>
+                <!--aqui esta el dialog para crear una nueva etiqueta-->
+                <div class="d-flex justify-content-center">
+                <div class="modal fade" id="crearEtiquetaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Crear Etiqueta</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Formulario para crear etiqueta -->
+                            <form @submit.prevent="createTag">
+                            <div class="mb-3">
+                                <label for="nombreEtiqueta" class="form-label">Nombre de la Etiqueta</label>
+                                <input type="text" class="form-control" id="name" v-model="newTag" placeholder="Ingrese el nombre de la etiqueta" required>
+                            </div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <!--aqui termina-->
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secondary" @click="cancel">Cancelar</button>
                 </div>
             </form>
             </div>
@@ -39,6 +71,7 @@
 <script>
     import TaskService from '../service/TaskService';
     import TagService from '../service/TagService';
+    import Swal from 'sweetalert2';
     export default {
     name : 'CreateTask',
     data() {
@@ -50,7 +83,8 @@
             },
             tags : [],
             selectedTags: [], // Lista de etiquetas seleccionadas
-            idUser : null,
+            userId : null,
+            newTag : null,
         }
     },
     created(){
@@ -60,14 +94,14 @@
     mounted(){
         
         try {
-            this.idUser = this.$store.getters['getUserId'];
-            console.log("ID del usuario reconocido en create task : " + this.idUser);
-            if(this.idUser == null){
+            this.userId = this.$store.getters['getUserId'];
+            console.log("ID del usuario reconocido en create task : " + this.userId);
+            if(this.userId == null){
                 console.log("No hay usuario logueado");
                 this.$router.push({ name: 'login'});
             }
             try {
-                this.tagService.getAllTagsByUserId(this.idUser).then((data) => {
+                this.tagService.getAllTagsByUserId(this.userId).then((data) => {
                     this.tags = data.data.content;
                     console.log(this.tags);
                 });
@@ -86,7 +120,7 @@
             console.log("se recuperó la nueva tarea:" + this.task.name);
             console.log('fecha de vencimiento: ' + this.task.dueDateDate + "hora: " + this.task.dueDateHour);
             console.log('etiquetas seleccionadas: ' + this.selectedTags);
-            this.taskService.insertTaskForUser(this.idUser, this.task.dueDateDate, this.task.dueDateHour, this.task.name).then((data) => {
+            this.taskService.insertTaskForUser(this.userId, this.task.dueDateDate, this.task.dueDateHour, this.task.name).then((data) => {
                 console.log("codigo de respuesta http: "+ data.data.code);
                 if(data.data.code == "T-000"){
                     console.log("tarea :" + data.data.content.id_tasks);
@@ -109,7 +143,7 @@
             console.log("llegamos a insert tag of task");
             this.selectedTags.forEach((tag) => {
                 console.log(tag);
-                this.taskService.insertTagOfTask(taskId,tag, this.idUser).then((data) => {
+                this.taskService.insertTagOfTask(taskId,tag, this.userId).then((data) => {
                     console.log("codigo de respuesta http: "+ data.data.code);
                     if(data.data.code == "T-000"){
                         //se insertó correctamente la tarea :D
@@ -128,6 +162,28 @@
     cancel() {
         this.$router.push({ name: 'tasks'});
     },
+    createTag(){
+            console.log("se recuperó la nueva etiqueta:" + this.newTag);
+            this.tagService.insertTagForUser(this.userId, this.newTag).then((data) => {
+                console.log("codigo de respuesta http: "+ data.data.code);
+                if(data.data.code == "T-000"){
+                    //se insertó correctamente la etiqueta :D
+                    console.log('se creó la etiqueta correctamente :D');
+                    this.tagService.getAllTagsByUserId(this.userId).then((data) => {
+                        this.tags = data.data.content;
+                        console.log(this.tags);
+                    });
+                    Swal.fire(
+                        '¡Creado!',
+                        'La etiqueta ha sido creada.',
+                        'success'
+                    )
+                }else{
+                    console.log('no se pudo crear la etiqueta :(');
+                }
+            }
+            );
+        },
     },
 }
 </script>

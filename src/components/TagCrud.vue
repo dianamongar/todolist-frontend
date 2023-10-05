@@ -181,6 +181,7 @@ export default {
                         this.tags = data.data.content;
                         console.log(this.tags);
                     });
+                    
                     Swal.fire(
                         '¡Editado!',
                         'La etiqueta ha sido editada.',

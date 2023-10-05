@@ -121,7 +121,7 @@ export default {
         });
     },
     toggleTaskStatus(taskId, name, dueDate, state) {
-        //FIXME que pueda cambiar el estado a pendiente y la fecha de completado a null
+        
         console.log('Cambiando estado de tarea...');
         console.log('estado actual : ' + state)
         var message='¿Quieres marcar esta tarea como completada?';
