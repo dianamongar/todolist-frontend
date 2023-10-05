@@ -21,7 +21,7 @@
                         <br/>
                         <div class="d-flex w-100 justify-content-between">
                             <a href="#" class="btn btn-primary btn-sm mr-2" ><i class="fas fa-pencil-alt"></i> Editar</a>
-                            <a href="#" class="btn btn-danger btn-sm"  @click="() => confirmDelete(task.task.id_tasks)"><i class="fas fa-trash-alt"></i> Borrar</a>
+                            <a href="#" class="btn btn-danger btn-sm"  @click="() => deleteTag(tag.id_tags)"><i class="fas fa-trash-alt"></i> Borrar</a>
                         </div>
                     </div>
                 </div>
@@ -31,6 +31,7 @@
 <script>
 import TagService from '../service/TagService';
 import NavBarBase from "@/components/NavBarBase.vue";
+import Swal from 'sweetalert2';
 export default {
     name : 'TagCrud',
     components: {
@@ -39,6 +40,7 @@ export default {
     data() {
         return {
             tags : null,
+            userId : null, 
         }
     },
     created(){
@@ -47,7 +49,13 @@ export default {
     mounted(){
         // Verifica si this.tagService se ha creado antes de llamar a getAllTagsByUserId
         try {
-            this.tagService.getAllTagsByUserId(2).then((data) => {
+            this.userId = this.$store.getters['getUserId'];
+            console.log("ID del usuario reconocido en tag crud : " + this.userId);
+            if(this.userId == null){
+                console.log("No hay usuario logueado");
+                this.$router.push({ name: 'login'});
+            }
+            this.tagService.getAllTagsByUserId(this.userId).then((data) => {
                 this.tags = data.data.content;
                 console.log(this.tags);
             });
@@ -55,8 +63,39 @@ export default {
         } catch (error) {
             console.error("Se produjo un error al obtener las etiquetas:", error);
         }
+    },
+    methods:{
+        deleteTag(tagId){
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "No podrás revertir esta acción",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText : 'Cancelar',
+                confirmButtonText: 'Sí, eliminar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.tagService.deleteTag(tagId, this.userId).then((data) => {
+                        if(data.data.code == "T-000"){
+                            console.log("Etiqueta borrada");
+                            this.tagService.getAllTagsByUserId(this.userId).then((data) => {
+                                this.tags = data.data.content;
+                                console.log(this.tags);
+                            });
+                            Swal.fire(
+                                '¡Borrado!',
+                                'La etiqueta ha sido borrada.',
+                                'success'
+                            )
+                        }
+                    });
+                }
+            })
+        },
+        },
     }
-}
 </script>
 <style scoped>
 

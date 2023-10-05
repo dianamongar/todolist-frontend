@@ -4,8 +4,8 @@
       <div class="logo">Logo</div>
       <div class="menu">
         <router-link to="/">Inicio</router-link>
-        <router-link to="/productos">Productos</router-link>
-        <router-link to="/servicios">Servicios</router-link>
+        <router-link to="/tags">Etiquetas</router-link>
+        <router-link to="/tasks">Tareas</router-link>
         <!-- Puedes agregar más enlaces según tus necesidades -->
       </div>
     </div>

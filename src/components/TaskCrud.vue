@@ -1,8 +1,7 @@
 
     
 <template>
-    
-
+    <NavBarBase/>
     <div class="cabecera">
         <h1>Lista de tareas</h1>
         <div>
@@ -52,9 +51,13 @@
 
 <script>
 import Swal from 'sweetalert2';
+import NavBarBase from "@/components/NavBarBase.vue";
 import TaskService from '../service/TaskService';
 export default {
     name : 'TaskCrud',
+    components: {
+        NavBarBase,
+    },
     data() {
         return {
             tasks : null,
