@@ -1,11 +1,12 @@
 
     
 <template>
+    <div :key="keyForComponent">
     <NavBarBase/>
     <div class="cabecera">
         <h1>Lista de tareas</h1>
         <div>
-                <ButtonComponent @click="createTask" class="p-button p-button-primary"><strong>Nueva tarea</strong></ButtonComponent>
+            <ButtonComponent @click="createTask" class="p-button p-button-primary"><strong>Nueva tarea</strong></ButtonComponent>
         </div> 
     </div>
     <br/>
@@ -48,7 +49,7 @@
         </div>
         <br/>
     </div>
-    
+</div>
 </template>
 
 <script>
@@ -57,38 +58,62 @@ import NavBarBase from "@/components/NavBarBase.vue";
 import TaskService from '../service/TaskService';
 export default {
     name : 'TaskCrud',
+    props: {
+    state: String, // Declarar state como una propiedad de tipo String
+    },
     components: {
         NavBarBase,
     },
     data() {
         return {
+            keyForComponent: 0,
             tasks : null,
             userId : null,
         }
     },
+    beforeRouteUpdate(to, from, next) {
+        next(vm => {
+            vm.loadData();
+        });
+    },
     taskService : null,
     created(){
         this.taskService = new TaskService();
+        
     },
     mounted(){
         
         try {
             this.userId = this.$store.getters['getUserId'];
-            console.log("ID del usuario reconocido en task : " + this.userId);
+            console.log("--------------ID del usuario reconocido en task state: " + this.userId);
             console.log("el estado es : " + this.state);
             if(this.userId == null){
                 this.$router.push({ name: 'login'});
             }
-            this.taskService.getAllTasksByUserId(this.userId).then((data) => {
-                this.tasks = data.data.content;
-                console.log(this.tasks);
-            });
+            this.getTasks();
             
         } catch (error) {
             console.error("Se produjo un error al obtener las etiquetas:", error);
         }
     },
     methods: {
+    getTasks(){
+        if(this.state == 'Completado')
+                this.taskService.getAllCompletedTasksByUserId(this.userId).then((data) => {
+                    this.tasks = data.data.content;
+                    console.log(this.tasks);
+                });
+            else if(this.state == 'Pendiente')
+                this.taskService.getAllPendingTasksByUserId(this.userId).then((data) => {
+                    this.tasks = data.data.content;
+                    console.log(this.tasks);
+                });
+            else
+            this.taskService.getAllTasksByUserId(this.userId).then((data) => {
+                this.tasks = data.data.content;
+                console.log(this.tasks);
+            });
+    },
     createTask() {
         this.$router.push({ name: 'createTask'});
     },
@@ -109,10 +134,7 @@ export default {
                 console.log(data);
                 if(data.data.code == "T-000"){
                     console.log("tarea eliminada");
-                    this.taskService.getAllTasksByUserId(this.userId).then((data) => {
-                        this.tasks = data.data.content;
-                        console.log(this.tasks);
-                    });
+                    this.getTasks();
                     Swal.fire('Eliminado', 'El registro ha sido eliminado', 'success');
                 }
                 
@@ -151,10 +173,7 @@ export default {
                 console.log(data);
                 if(data.data.code == "T-000"){
                     console.log("tarea marcada como completada");
-                    this.taskService.getAllTasksByUserId(this.userId).then((data) => {
-                        this.tasks = data.data.content;
-                        console.log(this.tasks);
-                    });
+                    this.getTasks();
                     Swal.fire('Se cambió el estado!', messageFinal, 'success');
                 }
                 

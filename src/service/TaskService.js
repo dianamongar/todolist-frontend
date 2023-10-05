@@ -11,7 +11,7 @@ export default class TaskService{
         
     }
     urlCompleted = "http://localhost:8080/api/v1/tasks?state=Completado";
-    getAllTasksByUserIdCompleted(userId){
+    getAllCompletedTasksByUserId(userId){
         const headers = {
             'id_users': userId,
         };
@@ -19,7 +19,7 @@ export default class TaskService{
         
     }
     urlPending = "http://localhost:8080/api/v1/tasks?state=Pendiente";
-    getAllTasksByUserIdPending(userId){
+    getAllPendingTasksByUserId(userId){
         const headers = {
             'id_users': userId,
         };
