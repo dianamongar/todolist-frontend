@@ -30,12 +30,16 @@
                             </div>
                         </a>
                         <br/>
-                        <div >
-                            <!-- <font-awesome-icon icon="trash" /> -->
-                            <!-- Icono de Editar (lápiz) más pequeño y con margen -->
-                            <a href="#" class="btn btn-primary btn-sm mr-2" ><i class="fas fa-pencil-alt"></i> Editar</a>
-                            <!-- Icono de Borrar (basura) más pequeño y con margen -->
-                            <a href="#" class="btn btn-danger btn-sm"  @click="() => confirmDelete(task.task.id_tasks)"><i class="fas fa-trash-alt"></i> Borrar</a>
+                        <div class="d-flex w-100 justify-content-between">
+                            <div>
+                                <a href="#" class="btn btn-primary btn-sm mr-2" ><i class="fas fa-pencil-alt"></i> Editar</a>
+                                <a href="#" class="btn btn-danger btn-sm"  @click="() => confirmDelete(task.task.id_tasks)"><i class="fas fa-trash-alt"></i> Borrar</a>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-light" @click="toggleTaskStatus">
+                                    {{ task.task.state === 'Completado' ? 'Marcar como pendiente' : 'Marcar como completada' }}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
