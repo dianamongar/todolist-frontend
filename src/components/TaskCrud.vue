@@ -35,7 +35,7 @@
                             <!-- Icono de Editar (lápiz) más pequeño y con margen -->
                             <a href="#" class="btn btn-primary btn-sm mr-2" ><i class="fas fa-pencil-alt"></i> Editar</a>
                             <!-- Icono de Borrar (basura) más pequeño y con margen -->
-                            <a href="#" class="btn btn-danger btn-sm"  @click="confirmDelete"><i class="fas fa-trash-alt"></i> Borrar</a>
+                            <a href="#" class="btn btn-danger btn-sm"  @click="() => confirmDelete(task.task.id_tasks)"><i class="fas fa-trash-alt"></i> Borrar</a>
                         </div>
                     </div>
                 </div>
@@ -54,6 +54,7 @@ export default {
     data() {
         return {
             tasks : null,
+            userId : null,
         }
     },
     taskService : null,
@@ -61,10 +62,14 @@ export default {
         this.taskService = new TaskService();
     },
     mounted(){
-        const idDice = this.$store.getters['getUserId'];
-        console.log("ID del usuario reconocido en task : " + idDice);
+        
         try {
-            this.taskService.getAllTasksByUserId(idDice).then((data) => {
+            this.userId = this.$store.getters['getUserId'];
+            console.log("ID del usuario reconocido en task : " + this.userId);
+            if(this.userId == null){
+                this.$router.push({ name: 'login'});
+            }
+            this.taskService.getAllTasksByUserId(this.userId).then((data) => {
                 this.tasks = data.data.content;
                 console.log(this.tasks);
             });
@@ -77,7 +82,7 @@ export default {
     createTask() {
         this.$router.push({ name: 'createTask'});
     },
-    confirmDelete() {
+    confirmDelete(taskId) {
         Swal.fire({
             title: '¿Estás segur@?',
             text: '¿Quieres eliminar esta tarea?',
@@ -89,9 +94,20 @@ export default {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-            // Aquí puedes agregar la lógica para eliminar el registro
-            // Llamar a tu función de eliminación o realizar alguna acción
-            Swal.fire('Eliminado', 'El registro ha sido eliminado', 'success');
+            console.log('Eliminando tarea...');
+            this.taskService.deleteTask(taskId, this.userId).then((data) => {
+                console.log(data);
+                if(data.data.code == "T-000"){
+                    console.log("tarea eliminada");
+                    this.taskService.getAllTasksByUserId(this.userId).then((data) => {
+                        this.tasks = data.data.content;
+                        console.log(this.tasks);
+                    });
+                    Swal.fire('Eliminado', 'El registro ha sido eliminado', 'success');
+                }
+                
+            });
+            
             }
         });
     },

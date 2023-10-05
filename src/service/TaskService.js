@@ -48,4 +48,11 @@ export default class TaskService{
         console.log(urlInsertTagOfTask);
         return axios.post(urlInsertTagOfTask, requestData,{ headers });
     }
+    deleteTask(taskId, userId){
+        const headers = {
+            'id_users': userId,
+        };
+        const urlDeleteTask = `http://localhost:8080/api/v1/tasks/${taskId}`;
+        return axios.delete(urlDeleteTask,{ headers });
+    }
 }
