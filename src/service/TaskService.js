@@ -55,4 +55,16 @@ export default class TaskService{
         const urlDeleteTask = `http://localhost:8080/api/v1/tasks/${taskId}`;
         return axios.delete(urlDeleteTask,{ headers });
     }
+    completeTask(taskId, name, dueDate, userId){
+        const headers = {
+            'id_users': userId,
+        };
+        const urlCompleteTask = `http://localhost:8080/api/v1/tasks/${taskId}`;
+        const requestData = {
+            "name" : name,
+            "due_date" : dueDate,
+            "state" : "Completado"
+        }
+        return axios.put(urlCompleteTask, requestData,{ headers });
+    }
 }

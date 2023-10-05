@@ -11,8 +11,8 @@
     </div>
     <br/>
     <div>
-        <div class="list-group" style="padding:5%">
-                <div v-for="task in tasks" :key="task.id_tasks" class="card">
+        <div class="list-group" style="padding:5%" >
+                <div v-for="task in tasks" :key="task.id_tasks" class="card" >
                     <div class="card-body">
                         <a href="#" class="list-group-item list-group-item-action ">
                             <div>
@@ -36,7 +36,7 @@
                                 <a href="#" class="btn btn-danger btn-sm"  @click="() => confirmDelete(task.task.id_tasks)"><i class="fas fa-trash-alt"></i> Borrar</a>
                             </div>
                             <div>
-                                <button type="button" class="btn btn-light" @click="toggleTaskStatus">
+                                <button type="button" class="btn btn-light" @click="() => toggleTaskStatus(task.task.id_tasks, task.task.name, task.task.due_date) ">
                                     {{ task.task.state === 'Completado' ? 'Marcar como pendiente' : 'Marcar como completada' }}
                                 </button>
                             </div>
@@ -108,6 +108,36 @@ export default {
                         console.log(this.tasks);
                     });
                     Swal.fire('Eliminado', 'El registro ha sido eliminado', 'success');
+                }
+                
+            });
+            
+            }
+        });
+    },
+    toggleTaskStatus(taskId, name, dueDate) {
+        console.log('Cambiando estado de tarea...');
+        Swal.fire({
+            title: '¿Estás segur@?',
+            text: '¿Quieres marcar esta tarea como completada?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, marcar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+            console.log('Eliminando tarea...');
+            this.taskService.completeTask(taskId, name, dueDate, this.userId).then((data) => {
+                console.log(data);
+                if(data.data.code == "T-000"){
+                    console.log("tarea marcada como completada");
+                    this.taskService.getAllTasksByUserId(this.userId).then((data) => {
+                        this.tasks = data.data.content;
+                        console.log(this.tasks);
+                    });
+                    Swal.fire('Completada!', 'La tarea ha sido marcada como completada :D', 'success');
                 }
                 
             });
