@@ -22,20 +22,22 @@
                                     </small>
                                 </div>
                                 <p class="mb-1">Fecha de vencimiento: <strong>{{task.task.due_date}}</strong></p>
-                                <small>Fecha de completado: {{task.task.completation_date}}</small>
+                                <small v-if="task.task.state !== 'Pendiente'">Fecha de completado: {{ task.task.completation_date }}</small>
+
                                 <div v-for="tag in task.tag" :key="tag">
                                     <i class="fas fa-tag"></i><mark style="background-color: rgba(255, 237, 148, 0.58);">{{tag}}</mark>
                                 </div>
                             </div>
                         </a>
                         <br/>
+                        <!--TODO al crear una etiqueta, debe reconocer diferentes etiquetas para un usuario-->
                         <div class="d-flex w-100 justify-content-between">
                             <div>
-                                <a href="#" class="btn btn-primary btn-sm mr-2" ><i class="fas fa-pencil-alt"></i> Editar</a>
+                                <a href="#" class="btn btn-primary btn-sm mr-2" @click="() => updateTask(task.task.name, task.task.state, task.task.due_date, task.tag,task.task.id_tasks)"><i class="fas fa-pencil-alt" ></i> Editar</a>
                                 <a href="#" class="btn btn-danger btn-sm"  @click="() => confirmDelete(task.task.id_tasks)"><i class="fas fa-trash-alt"></i> Borrar</a>
                             </div>
                             <div>
-                                <button type="button" class="btn btn-light" @click="() => toggleTaskStatus(task.task.id_tasks, task.task.name, task.task.due_date) ">
+                                <button type="button" class="btn btn-light" @click="() => toggleTaskStatus(task.task.id_tasks, task.task.name, task.task.due_date, task.task.state) ">
                                     {{ task.task.state === 'Completado' ? 'Marcar como pendiente' : 'Marcar como completada' }}
                                 </button>
                             </div>
@@ -118,11 +120,23 @@ export default {
             }
         });
     },
-    toggleTaskStatus(taskId, name, dueDate) {
+    toggleTaskStatus(taskId, name, dueDate, state) {
+        //FIXME que pueda cambiar el estado a pendiente y la fecha de completado a null
         console.log('Cambiando estado de tarea...');
+        console.log('estado actual : ' + state)
+        var message='¿Quieres marcar esta tarea como completada?';
+        var newState="Completado";
+        var messageFinal='La tarea ha sido marcada como completada :D';
+        
+        if(state == 'Completado'){
+            message='¿Quieres marcar esta tarea como pendiente?';
+            newState="Pendiente";
+            messageFinal='La tarea ha sido marcada como pendiente';
+        }
+            
         Swal.fire({
             title: '¿Estás segur@?',
-            text: '¿Quieres marcar esta tarea como completada?',
+            text: message,
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -131,8 +145,8 @@ export default {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-            console.log('Eliminando tarea...');
-            this.taskService.completeTask(taskId, name, dueDate, this.userId).then((data) => {
+            console.log('Cambiando estado...');
+            this.taskService.completeTask(taskId, name, dueDate, this.userId, newState).then((data) => {
                 console.log(data);
                 if(data.data.code == "T-000"){
                     console.log("tarea marcada como completada");
@@ -140,13 +154,28 @@ export default {
                         this.tasks = data.data.content;
                         console.log(this.tasks);
                     });
-                    Swal.fire('Completada!', 'La tarea ha sido marcada como completada :D', 'success');
+                    Swal.fire('Se cambió el estado!', messageFinal, 'success');
                 }
                 
             });
             
             }
         });
+    },
+    updateTask(name, state, due_date, tag, id_tasks){
+        //task.task.name, task.task.state, task.task.due_date, task.tag,
+        console.log("se produce un cambio en la tarea");
+        console.log(name + state + due_date + tag + id_tasks);
+        const task = {
+                id: id_tasks,
+                name: name,
+                dueDate: due_date,
+                tags: tag,
+                state: state,
+            };
+        this.$store.commit('setTask', task);
+        console.log("este es el task guardado en store: " + this.$store.getters['getTask']);
+        this.$router.push({ name: 'updateTask'});
     },
     },
 }

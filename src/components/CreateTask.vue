@@ -1,47 +1,41 @@
 <template>
-    <div class="container d-flex justify-content-center align-items-center vh-100">
-        <CardComponent class="p-mb-3" style="width: 500px">
-            <template #header>
-                <h3>Nueva Tarea</h3>
-            </template>
-            <template #content>
-                <!-- Cuerpo de la tarjeta -->
-                <form @submit.prevent="createTask">
-                    <label for="title">Descripción:</label>
-                    <br/>
-                    <div class="p-grid p-justify-center">
-                        <TextArea type="text" id="name" v-model="task.name" required :maxlength="100" ></TextArea>
+        <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card" style="width: 500px;">
+            <div class="card-header">
+            <h3 class="card-title">Nueva Tarea</h3>
+            </div>
+            <div class="card-body">
+            <!-- Cuerpo de la tarjeta -->
+            <form @submit.prevent="createTask">
+                <div class="mb-3">
+                <label for="name" class="form-label">Descripción:</label>
+                <input type="textArea" id="name" class="form-control" v-model="task.name" required :maxlength="100">
+                </div>
+                <div class="mb-3">
+                <label for="dueDateDate" class="form-label">Fecha límite:</label>
+                <input type="date" id="dueDateDate" class="form-control" v-model="task.dueDateDate" required>
+                <input type="time" id="dueDateHour" class="form-control" v-model="task.dueDateHour" required>
+                </div>
+                <!-- ETIQUETAS PARA ASOCIAR A LA TAREA -->
+                <div class="card">
+                <div class="card-body">
+                    <div class="form-check" v-for="tag in tags" :key="tag.id_tags">
+                    <input type="checkbox" class="form-check-input" :id="'tag' + tag.id_tags" v-model="selectedTags" :value="tag.id_tags">
+                    <label class="form-check-label" :for="'tag' + tag.id_tags">{{ tag.name }}</label>
                     </div>
-                    <br/>
-                    <label for="description">Fecha límite:</label>
-                    <br/>
-                    <div class="p-grid p-justify-center">
-                        <InputText id="dueDateDate" type="date" v-model="task.dueDateDate" required/>
-                        <InputText id="dueDateHour" type="time" v-model="task.dueDateHour" required/>
-                    </div>
-                    <br/>
-                    <!--ETIQUETAS PARA ASOCIAR A LA TAREA-->
-                    <div class="card">
-                        <div class="card flex justify-content-center">
-                            <div class="flex flex-column gap-3">
-                                <div v-for="tag of tags" :key="tag.id_tags" class="flex align-items-center">
-                                    <CheckBox v-model="selectedTags" :inputId="tag.id_tags.toString()" name="id_tags" :value="tag.id_tags" />
-                                    <label :for="tag.id_tags">{{ tag.name }}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--FIN ETIQUETAS PARA ASOCIAR A LA TAREA-->
-                    <div class="p-grid p-justify-center">
-                        <br/>
-                        <button type="submit" class="p-button p-button-primary">Guardar</button>
-                        <button class="p-button p-button-secondary" @click="cancel">Cancelar</button>
-                    </div>
-                </form>
-            </template>
-        </CardComponent>
-    </div>
+                </div>
+                </div>
+                <!-- FIN ETIQUETAS PARA ASOCIAR A LA TAREA -->
+                <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-secondary" @click="cancel">Cancelar</button>
+                </div>
+            </form>
+            </div>
+        </div>
+        </div>
 </template>
+
 <script>
     import TaskService from '../service/TaskService';
     import TagService from '../service/TagService';

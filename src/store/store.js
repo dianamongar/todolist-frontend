@@ -3,12 +3,23 @@ import { createStore } from 'vuex';
 
 const store = createStore({
     state: {
-            userId: null
+            userId: null,
+            task : {
+                id: null,
+                name: null,
+                dueDate: null,
+                tags: [],
+                state: null,
+            },
         },
         mutations: {
             setUserId(state, userId) {
             state.userId = userId
-            }
+            },
+            setTask(state, task) {
+                state.task = task;
+            },
+            
         },
         actions: {
             setUserId({ commit }, id) {
@@ -17,6 +28,7 @@ const store = createStore({
         },
         getters: {
             getUserId: (state) => state.userId,
+            getTask: (state) => state.task,
         },
 });
 

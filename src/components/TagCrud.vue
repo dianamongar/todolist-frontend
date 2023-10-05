@@ -167,6 +167,7 @@ export default {
             var nameTag = document.getElementById("nameEdit");
             nameTag.value = name;
         },
+        //FIXME cerrar el cuadro cuando se edita la etiqueta
         updateTag(tagId){
             console.log("se recuperó la nueva etiqueta:" + this.newValue);
             console.log("se recuperó la etiqueta a modificar:" + tagId);
