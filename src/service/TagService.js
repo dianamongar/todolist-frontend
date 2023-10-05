@@ -25,4 +25,14 @@ export default class TagService{
         }
         return axios.post(this.url, requestData,{ headers });
     }
+    updateTag(tagId, userId, name){
+        const headers = {
+            'id_users': userId,
+        };
+        const requestData = {
+            "name" : name
+        }
+        const urlUpdateTag = `http://localhost:8080/api/v1/tags/${tagId}`;
+        return axios.put(urlUpdateTag, requestData,{ headers });
+    }
 }

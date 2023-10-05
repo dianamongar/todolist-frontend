@@ -41,9 +41,32 @@
                         </a>
                         <br/>
                         <div class="d-flex w-100 justify-content-between">
-                            <a href="#" class="btn btn-primary btn-sm mr-2" ><i class="fas fa-pencil-alt"></i> Editar</a>
+                            <a href="#" class="btn btn-primary btn-sm mr-2" @click="() => editTag(tag.id_tags, tag.name)" data-bs-toggle="modal" data-bs-target="#editarEtiquetaModal"><i class="fas fa-pencil-alt"></i> Editar</a>
                             <a href="#" class="btn btn-danger btn-sm"  @click="() => deleteTag(tag.id_tags)"><i class="fas fa-trash-alt"></i> Borrar</a>
                         </div>
+                        <!--editar  la etiqueta -->
+                        <div class="modal fade" id="editarEtiquetaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Editar Etiqueta</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Formulario para editar etiqueta -->
+                                    <form @submit.prevent="updateTag(tag.id_tags)">
+                                    <div class="mb-3">
+                                        <label for="nombreEtiqueta" class="form-label">Nombre de la Etiqueta</label>
+                                        <input type="text" class="form-control" id="nameEdit" v-model="newValue" placeholder="Ingrese el nombre de la etiqueta" required>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                    </form>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--aqui termina el editar etiqueta-->
                     </div>
                 </div>
             <br/>
@@ -63,6 +86,7 @@ export default {
             tags : null,
             userId : null, 
             newTag : null,
+            newValue : null,
         }
     },
     created(){
@@ -138,6 +162,36 @@ export default {
             }
             );
         },
+        editTag(tagId, name){
+            console.log("se recuperó la etiqueta:" + tagId);
+            var nameTag = document.getElementById("nameEdit");
+            nameTag.value = name;
+        },
+        updateTag(tagId){
+            console.log("se recuperó la nueva etiqueta:" + this.newValue);
+            console.log("se recuperó la etiqueta a modificar:" + tagId);
+            console.log("del usuario:" + this.userId);
+            this.tagService.updateTag(tagId, this.userId, this.newValue ).then((data) => {
+                console.log("codigo de respuesta http: "+ data.data.code);
+                if(data.data.code == "T-000"){
+                    //se insertó correctamente la etiqueta :D
+                    console.log('se editó la etiqueta correctamente :D');
+                    this.tagService.getAllTagsByUserId(this.userId).then((data) => {
+                        this.tags = data.data.content;
+                        console.log(this.tags);
+                    });
+                    Swal.fire(
+                        '¡Editado!',
+                        'La etiqueta ha sido editada.',
+                        'success'
+                    )
+                }else{
+                    console.log('no se pudo editar la etiqueta :(');
+                }
+            }
+            );
+        }
+        
     },
 }
 </script>
