@@ -4,7 +4,7 @@
     <div :key="keyForComponent">
     <NavBarBase/>
     <div class="cabecera">
-        <h1>Lista de tareas</h1>
+        <h1>Lista de tareas : {{ this.state }}</h1>
         <div>
             <ButtonComponent @click="createTask" class="p-button p-button-primary"><strong>Nueva tarea</strong></ButtonComponent>
         </div> 
@@ -22,8 +22,8 @@
                                         <strong>{{ task.task.state }}</strong>
                                     </small>
                                 </div>
-                                <p class="mb-1">Fecha de vencimiento: <strong>{{task.task.due_date}}</strong></p>
-                                <small v-if="task.task.state !== 'Pendiente'">Fecha de completado: {{ task.task.completation_date }}</small>
+                                <p class="mb-1">Fecha de vencimiento: <strong>{{formatDate(task.task.due_date)}}</strong></p>
+                                <small v-if="task.task.state !== 'Pendiente'">Fecha de completado: {{ formatDate(task.task.completation_date) }}</small>
 
                                 <div v-for="tag in task.tag" :key="tag">
                                     <i class="fas fa-tag"></i><mark style="background-color: rgba(255, 237, 148, 0.58);">{{tag}}</mark>
@@ -57,10 +57,10 @@ import Swal from 'sweetalert2';
 import NavBarBase from "@/components/NavBarBase.vue";
 import TaskService from '../service/TaskService';
 export default {
-    name : 'TaskCrud',
-    props: {
-    state: String, // Declarar state como una propiedad de tipo String
-    },
+    name : 'TaskPendingCrud',
+    // props: {
+    // state: String, // Declarar state como una propiedad de tipo String
+    // },
     components: {
         NavBarBase,
     },
@@ -69,6 +69,7 @@ export default {
             keyForComponent: 0,
             tasks : null,
             userId : null,
+            state : 'Pendiente',
         }
     },
     beforeRouteUpdate(to, from, next) {
@@ -82,7 +83,6 @@ export default {
         
     },
     mounted(){
-        
         try {
             this.userId = this.$store.getters['getUserId'];
             console.log("--------------ID del usuario reconocido en task state: " + this.userId);
@@ -97,6 +97,20 @@ export default {
         }
     },
     methods: {
+        formatDate(dateTime) {
+        if (dateTime) {
+            const date = new Date(dateTime);
+            date.setHours(date.getHours() + 4);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+
+            return `${day}/${month}/${year} - ${hours}:${minutes}`;
+        }
+        return '';
+    },
     getTasks(){
         if(this.state == 'Completado')
                 this.taskService.getAllCompletedTasksByUserId(this.userId).then((data) => {

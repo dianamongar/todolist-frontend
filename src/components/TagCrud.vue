@@ -113,8 +113,8 @@ export default {
     methods:{
         deleteTag(tagId){
             Swal.fire({
-                title: '¿Estás seguro?',
-                text: "No podrás revertir esta acción",
+                title: '¿Estás segur@?',
+                text: "Se borrará la etiqueta de todas las tareas que estén relacionadas con ella",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

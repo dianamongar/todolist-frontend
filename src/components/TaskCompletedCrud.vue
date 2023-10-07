@@ -1,9 +1,8 @@
-
-    
 <template>
+    <div :key="keyForComponent">
     <NavBarBase/>
     <div class="cabecera">
-        <h1>Lista de tareas</h1>
+        <h1>Lista de tareas : {{ this.state }}</h1>
         <div>
             <ButtonComponent @click="createTask" class="p-button p-button-primary"><strong>Nueva tarea</strong></ButtonComponent>
         </div> 
@@ -21,7 +20,7 @@
                                         <strong>{{ task.task.state }}</strong>
                                     </small>
                                 </div>
-                                <p class="mb-1">Fecha de vencimiento: <strong>{{formatDate(task.task.due_date)}}</strong></p>
+                                <p class="mb-1">Fecha de vencimiento: <strong>{{ formatDate(task.task.due_date) }}</strong></p>
                                 <small v-if="task.task.state !== 'Pendiente'">Fecha de completado: {{ formatDate(task.task.completation_date) }}</small>
 
                                 <div v-for="tag in task.tag" :key="tag">
@@ -30,7 +29,6 @@
                             </div>
                         </a>
                         <br/>
-                        <!--FIXME formate de las fechas en el html-->
                         <!--TODO al crear una etiqueta, debe reconocer diferentes etiquetas para un usuario-->
                         <div class="d-flex w-100 justify-content-between">
                             <div>
@@ -49,7 +47,7 @@
         </div>
         <br/>
     </div>
-    
+</div>
 </template>
 
 <script>
@@ -57,40 +55,47 @@ import Swal from 'sweetalert2';
 import NavBarBase from "@/components/NavBarBase.vue";
 import TaskService from '../service/TaskService';
 export default {
-    name : 'TaskCrud',
+    name : 'TaskCompletedCrud',
+    // props: {
+    // state: String, // Declarar state como una propiedad de tipo String
+    // },
     components: {
         NavBarBase,
     },
     data() {
         return {
+            keyForComponent: 0,
             tasks : null,
             userId : null,
+            state : 'Completado',
         }
+    },
+    beforeRouteUpdate(to, from, next) {
+        next(vm => {
+            vm.loadData();
+        });
     },
     taskService : null,
     created(){
         this.taskService = new TaskService();
+        
     },
     mounted(){
-        
         try {
             this.userId = this.$store.getters['getUserId'];
-            console.log("ID del usuario reconocido en task : " + this.userId);
+            console.log("--------------ID del usuario reconocido en task state: " + this.userId);
             console.log("el estado es : " + this.state);
             if(this.userId == null){
                 this.$router.push({ name: 'login'});
             }
-            this.taskService.getAllTasksByUserId(this.userId).then((data) => {
-                this.tasks = data.data.content;
-                console.log(this.tasks);
-            });
+            this.getTasks();
             
         } catch (error) {
             console.error("Se produjo un error al obtener las etiquetas:", error);
         }
     },
     methods: {
-        formatDate(dateTime) {
+    formatDate(dateTime) {
         if (dateTime) {
             const date = new Date(dateTime);
             date.setHours(date.getHours() + 4);
@@ -103,6 +108,23 @@ export default {
             return `${day}/${month}/${year} - ${hours}:${minutes}`;
         }
         return '';
+    },
+    getTasks(){
+        if(this.state == 'Completado')
+                this.taskService.getAllCompletedTasksByUserId(this.userId).then((data) => {
+                    this.tasks = data.data.content;
+                    console.log(this.tasks);
+                });
+            else if(this.state == 'Pendiente')
+                this.taskService.getAllPendingTasksByUserId(this.userId).then((data) => {
+                    this.tasks = data.data.content;
+                    console.log(this.tasks);
+                });
+            else
+            this.taskService.getAllTasksByUserId(this.userId).then((data) => {
+                this.tasks = data.data.content;
+                console.log(this.tasks);
+            });
     },
     createTask() {
         this.$router.push({ name: 'createTask'});
@@ -124,10 +146,7 @@ export default {
                 console.log(data);
                 if(data.data.code == "T-000"){
                     console.log("tarea eliminada");
-                    this.taskService.getAllTasksByUserId(this.userId).then((data) => {
-                        this.tasks = data.data.content;
-                        console.log(this.tasks);
-                    });
+                    this.getTasks();
                     Swal.fire('Eliminado', 'El registro ha sido eliminado', 'success');
                 }
                 
@@ -166,10 +185,7 @@ export default {
                 console.log(data);
                 if(data.data.code == "T-000"){
                     console.log("tarea marcada como completada");
-                    this.taskService.getAllTasksByUserId(this.userId).then((data) => {
-                        this.tasks = data.data.content;
-                        console.log(this.tasks);
-                    });
+                    this.getTasks();
                     Swal.fire('Se cambió el estado!', messageFinal, 'success');
                 }
                 

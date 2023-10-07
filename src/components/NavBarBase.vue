@@ -40,7 +40,7 @@
             <router-link to="/tasks" class="nav-link">Tareas</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/tasks/Completado" class="nav-link">Tareas completadas</router-link>
+            <router-link to="/tasks/Completado" class="nav-link">Tareas Completadas</router-link>
           </li>
           <li class="nav-item">
             <router-link to="/tasks/Pendiente" class="nav-link">Tareas Pendientes</router-link>
