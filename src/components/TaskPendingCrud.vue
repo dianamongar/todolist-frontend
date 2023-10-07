@@ -89,8 +89,10 @@ export default {
             console.log("el estado es : " + this.state);
             if(this.userId == null){
                 this.$router.push({ name: 'login'});
+            }else{
+                this.getTasks();
             }
-            this.getTasks();
+            
             
         } catch (error) {
             console.error("Se produjo un error al obtener las etiquetas:", error);

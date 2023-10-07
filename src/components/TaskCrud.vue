@@ -79,11 +79,13 @@ export default {
             console.log("el estado es : " + this.state);
             if(this.userId == null){
                 this.$router.push({ name: 'login'});
+            }else{
+                this.taskService.getAllTasksByUserId(this.userId).then((data) => {
+                    this.tasks = data.data.content;
+                    console.log(this.tasks);
+                });
             }
-            this.taskService.getAllTasksByUserId(this.userId).then((data) => {
-                this.tasks = data.data.content;
-                console.log(this.tasks);
-            });
+            
             
         } catch (error) {
             console.error("Se produjo un error al obtener las etiquetas:", error);

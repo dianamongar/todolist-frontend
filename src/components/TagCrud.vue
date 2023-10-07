@@ -100,11 +100,13 @@ export default {
             if(this.userId == null){
                 console.log("No hay usuario logueado");
                 this.$router.push({ name: 'login'});
+            }else{
+                this.tagService.getAllTagsByUserId(this.userId).then((data) => {
+                    this.tags = data.data.content;
+                    console.log(this.tags);
+                });
             }
-            this.tagService.getAllTagsByUserId(this.userId).then((data) => {
-                this.tags = data.data.content;
-                console.log(this.tags);
-            });
+            
             
         } catch (error) {
             console.error("Se produjo un error al obtener las etiquetas:", error);

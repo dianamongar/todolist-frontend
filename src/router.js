@@ -18,8 +18,8 @@ const routes = [
     { path: '/tasks', component: TaskCrud, name: 'tasks' },
     { path: '/tasks/Completado', component: TaskCompleted, name: 'tasksCompleted'},
     { path: '/tasks/Pendiente', component: TaskPending, name: 'tasksPending'},
-    { path: '/tasks', component: UpdateTask, name: 'updateTask' },
-    { path: '/tasks/{id_tasks}', component: CreateTask, name: 'createTask' },
+    { path: '/tasks', component: CreateTask, name: 'createTask' },
+    { path: '/tasks', component: UpdateTask, name: 'updateTask'},
 ];
 
 const router = createRouter({
