@@ -81,6 +81,7 @@
                 dueDateDate : "",
                 dueDateHour : "",
             },
+            
             tags : [],
             selectedTags: [], // Lista de etiquetas seleccionadas
             userId : null,
@@ -92,7 +93,6 @@
         this.tagService = new TagService();
     },
     mounted(){
-        
         try {
             this.userId = this.$store.getters['getUserId'];
             console.log("ID del usuario reconocido en create task : " + this.userId);
@@ -105,7 +105,6 @@
                     this.tags = data.data.content;
                     console.log(this.tags);
                 });
-                
             } catch (error) {
                 console.error("Se produjo un error al obtener las etiquetas:", error);
             }

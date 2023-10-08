@@ -11,6 +11,7 @@ import TaskCompleted from './components/TaskCompletedCrud.vue';
 import TaskPending from './components/TaskPendingCrud.vue';
 
 
+
 const routes = [
     { path: '/', component: Login, name: 'login' },
     { path: '/main', component: NavBar, name: 'main' },
@@ -19,7 +20,7 @@ const routes = [
     { path: '/tasks/Completado', component: TaskCompleted, name: 'tasksCompleted'},
     { path: '/tasks/Pendiente', component: TaskPending, name: 'tasksPending'},
     { path: '/tasks', component: CreateTask, name: 'createTask' },
-    { path: '/tasks', component: UpdateTask, name: 'updateTask'},
+    { path: '/tasks/Update', component: UpdateTask, name: 'updateTask'},
 ];
 
 const router = createRouter({

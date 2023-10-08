@@ -34,8 +34,8 @@
                         <!--TODO al crear una etiqueta, debe reconocer diferentes etiquetas para un usuario-->
                         <div class="d-flex w-100 justify-content-between">
                             <div>
-                                <a href="#" class="btn btn-primary btn-sm mr-2" @click="() => updateTask(task.task.name, task.task.state, task.task.due_date, task.tag,task.task.id_tasks)"><i class="fas fa-pencil-alt" ></i> Editar</a>
-                                <a href="#" class="btn btn-danger btn-sm"  @click="() => confirmDelete(task.task.id_tasks)"><i class="fas fa-trash-alt"></i> Borrar</a>
+                                <a  class="btn btn-primary btn-sm mr-2" @click="() => updateTask(task.task.id_tasks, task.task.name, task.task.state, task.task.due_date, task.tag)"><i class="fas fa-pencil-alt" ></i> Editar</a>
+                                <a  class="btn btn-danger btn-sm"  @click="() => confirmDelete(task.task.id_tasks)"><i class="fas fa-trash-alt"></i> Borrar</a>
                             </div>
                             <div>
                                 <button type="button" class="btn btn-light" @click="() => toggleTaskStatus(task.task.id_tasks, task.task.name, task.task.due_date, task.task.state) ">
@@ -180,20 +180,30 @@ export default {
             }
         });
     },
-    updateTask(name, state, due_date, tag, id_tasks){
-        //task.task.name, task.task.state, task.task.due_date, task.tag,
-        console.log("se produce un cambio en la tarea");
-        console.log(name + state + due_date + tag + id_tasks);
-        const task = {
-                id: id_tasks,
-                name: name,
-                dueDate: due_date,
-                tags: tag,
-                state: state,
-            };
-        this.$store.commit('setTask', task);
-        console.log("este es el task guardado en store: " + this.$store.getters['getTask']);
-        this.$router.push({ name: 'updateTask'});
+    updateTask(taskId, name, state, dueDate, tag){
+        //task.task.id_tasks, task.task.name, task.task.state, task.task.due_date, task.tag,
+        if(state=="Completado"){
+            Swal.fire({
+                icon: 'error',
+                title: 'No se puede editar!',
+                text: 'La tarea ya ha sido completada, por lo que no puede editarse.',
+            });
+        }else{
+            console.log("se produce un cambio en la tarea");
+            this.$store.commit('setTaskId', taskId);
+            this.$store.commit('setTaskName', name);
+            this.$store.commit('setTaskState', state);
+            this.$store.commit('setTaskDueDate', dueDate);
+            this.$store.commit('setTaskTags', tag);
+            console.log("este es el taskId guardado en store: " + this.$store.getters['getTaskId']);
+            console.log("este es el taskName guardado en store: " + this.$store.getters['getTaskName']);
+            console.log("este es el taskState guardado en store: " + this.$store.getters['getTaskState']);
+            console.log("este es el taskDueDate guardado en store: " + this.$store.getters['getTaskDueDate']);
+            console.log("este es el taskTags guardado en store: " + this.$store.getters['getTaskTags']);
+
+            this.$router.push({ name: 'updateTask'});
+        }
+        
     },
     },
 }

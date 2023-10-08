@@ -3,34 +3,63 @@ import { createStore } from 'vuex';
 
 const store = createStore({
     state: {
-            userId: null,
-            task : {
-                id: null,
-                name: null,
-                dueDate: null,
-                tags: [],
-                state: null,
-            },
+        userId: null,
+        taskId: null,
+        taskName: null,
+        taskDueDate: null,
+        taskTags: [],
+        taskState: null,
+    },
+    mutations: {
+        setUserId(state, userId) {
+            state.userId = userId;
         },
-        mutations: {
-            setUserId(state, userId) {
-            state.userId = userId
-            },
-            setTask(state, task) {
-                state.task = task;
-            },
-            
+        setTaskId(state, taskId) {
+            state.taskId = taskId;
         },
-        actions: {
-            setUserId({ commit }, id) {
+        setTaskName(state, taskName) {
+            state.taskName = taskName;
+        },
+        setTaskDueDate(state, taskDueDate) {
+            state.taskDueDate = taskDueDate;
+        },
+        setTaskTags(state, taskTags) {
+            state.taskTags = taskTags;
+        },
+        setTaskState(state, taskState) {
+            state.taskState = taskState;
+        },
+    },
+    actions: {
+        setUserId({ commit }, id) {
             commit('setUserId', id);
-            },
         },
-        getters: {
-            getUserId: (state) => state.userId,
-            getTask: (state) => state.task,
+        setTaskId({ commit }, id) {
+            commit('setTaskId', id);
         },
+        setTaskName({ commit }, name) {
+            commit('setTaskName', name);
+        },
+        setTaskDueDate({ commit }, dueDate) {
+            commit('setTaskDueDate', dueDate);
+        },
+        setTaskTags({ commit }, tags) {
+            commit('setTaskTags', tags);
+        },
+        setTaskState({ commit }, state) {
+            commit('setTaskState', state);
+        },
+    },
+    getters: {
+        getUserId: (state) => state.userId,
+        getTaskId: (state) => state.taskId,
+        getTaskName: (state) => state.taskName,
+        getTaskDueDate: (state) => state.taskDueDate,
+        getTaskTags: (state) => state.taskTags,
+        getTaskState: (state) => state.taskState,
+    },
 });
+
 
 export default store;
 // import Vue from 'vue'

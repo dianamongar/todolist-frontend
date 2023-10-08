@@ -48,6 +48,14 @@ export default class TaskService{
         console.log(urlInsertTagOfTask);
         return axios.post(urlInsertTagOfTask, requestData,{ headers });
     }
+    deleteTagOfTask(taskId, tagId, userId){
+        const headers = {
+            'id_users': userId,
+        };
+        const urlInsertTagOfTask = `http://localhost:8080/api/v1/tasks/${taskId}/tags/${tagId}`;
+        
+        return axios.delete(urlInsertTagOfTask, { headers });
+    }
     deleteTask(taskId, userId){
         const headers = {
             'id_users': userId,
@@ -66,5 +74,18 @@ export default class TaskService{
             "state" : state
         }
         return axios.put(urlCompleteTask, requestData,{ headers });
+    }
+    updateTask(userId, taskId, dueDateDate, dueDateTime, name){
+        const headers = {
+            'id_users': userId,
+        };
+        const dueDate = dueDateDate + "T" + dueDateTime+".000Z";
+        const requestData = {
+            "name" : name,
+            "due_date" : dueDate,
+            "state" : "Pendiente"
+        }   
+        const urlUpdateTask = `http://localhost:8080/api/v1/tasks/${taskId}`;
+        return axios.put(urlUpdateTask, requestData,{ headers });
     }
 }
