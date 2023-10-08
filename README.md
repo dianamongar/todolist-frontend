@@ -17,13 +17,13 @@ Este es el frontend de la aplicación de lista de tareas desarrollada para el pr
   * Axios: Una biblioteca para realizar solicitudes HTTP desde el frontend.
 ## 2. Instrucciones de Uso
 * Instalación de Dependencias:
-´´´
+```
 npm install
-´´´
+```
 Compilar y Ejecutar la Aplicación:
-´´´
+```
 npm run serve´
-´´´
+```
 * Acceso a la Aplicación:
 Abre un navegador web y accede a la aplicación en la dirección http://localhost:8081.
 
