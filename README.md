@@ -6,7 +6,7 @@ Este es el frontend de la aplicación de lista de tareas desarrollada para el pr
 
 ## 1. Características
 * Lista de Tareas: Visualiza y administra tus tareas pendientes y completadas.
-* Etiquetas: Agrega etiquetas personalizadas a tus tareas para una mejor organización.
+* Etiquetas: Agrega etiquetas personalizadas a tus tareas para una mejor organización, puedes modificarlas o eliminarlas.
 * Edición de Tareas: Modifica el nombre y la fecha de vencimiento de tus tareas.
 * Marcado de Tareas: Marca tus tareas como completadas o pendientes.
 * Eliminación de Tareas: Elimina tareas que ya no necesitas.
